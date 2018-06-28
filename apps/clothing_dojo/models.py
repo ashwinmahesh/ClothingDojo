@@ -20,7 +20,7 @@ class CartItem(models.Model):
     cart=models.ForeignKey(Cart, related_name='items')
     product=models.ForeignKey(Product, related_name='cart_items')
     color=models.ForeignKey(Color, related_name='cart_items')
-    size=models.CharField(max_length=3)
+    size=models.CharField(max_length=3, default='-')
     quantity=models.IntegerField()
     total=models.DecimalField(max_digits=8, decimal_places=2, default=0)
     created_at=models.DateTimeField(auto_now_add=True)

@@ -9,5 +9,6 @@ urlpatterns=[
     url(r'^addToCart/(?P<product_id>[0-9]\d*)/$', views.addToCart),
     url(r'^cart/$', views.cart),
     url(r'^removeCart/(?P<cartitem_id>[0-9]\d*)/$', views.removeFromCart),
-    url(r'^checkout/$', views.checkout)
+    url(r'^checkout/$', views.checkout),
+    url(r'^processCheckout/$', views.processCheckout)
 ]

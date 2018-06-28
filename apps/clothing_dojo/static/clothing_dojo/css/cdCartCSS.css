@@ -164,6 +164,12 @@ div.q_and_p p{
     }
 }
 @media only screen and (min-width:481px){
+    div.item div.info p.no{
+        width:fit-content;
+    }
+    div.item div.info{
+        width:50%;
+    }
     p.total{
         margin-top:20px;
     }
@@ -178,6 +184,9 @@ div.q_and_p p{
     }
 }
 @media only screen and (min-width:1024px){
+    div.body{
+        min-height:480px;
+    }
     table{
         display:block;
     }
@@ -191,7 +200,10 @@ div.q_and_p p{
         display:inline-block;
         vertical-align: top;
         margin-top:35px;
-        
+    }
+    p.total{
+        border-top:1px solid rgb(241,244,248);
+        padding-top:8px;
     }
     div.holding_table{
         width:650px;

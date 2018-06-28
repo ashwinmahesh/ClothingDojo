@@ -81,7 +81,7 @@
 
             <p class='total'>Total: ${{cart.total}}</p>
             </div>
-            
+            {% ifequal show_checkout 1 %}
             <div class='holding_right'>
                 <div class='right'>
                     <p class='big'>Order Summary</p>
@@ -93,6 +93,7 @@
                     <a href='/checkout/'>Secure Checkout</a>
                 </div>
             </div>
+            {% endifequal %}
             <!-- <p class='total'>Total: ${{cart.total}}</p> -->
         </div>
         <div class='footer'>

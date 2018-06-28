@@ -102,17 +102,20 @@ def cart(request):
     for item in User.objects.get(id=request.session['userID']).cart.items.all():
         count+=item.quantity
     e=getFromSession(request.session['flash'])
+    showCheckout=0
+    if len(User.objects.get(id=request.session['userID']).cart.items.all()):
+        showCheckout=1
     context={
         'user':User.objects.get(id=request.session['userID']),
         'cart_success':e.getMessages('cart_success'),
         'cart':User.objects.get(id=request.session['userID']).cart,
-        'count':count
+        'count':count,
+        'show_checkout':showCheckout
     }
     request.session['flash']=e.addToSession()
     return render(request, 'clothing_dojo/clothingDojo_cart.html', context)
 
 def removeFromCart(request, cartitem_id):
-    
     if 'loggedIn' not in request.session:
         return redirect('/login_page/')
     if request.session['loggedIn']==False:
@@ -140,8 +143,40 @@ def checkout(request):
         return redirect('/login_page/')
     if 'userID' not in request.session:
         return redirect('/login_page/')
+    try:
+        User.objects.get(id=request.session['userID']).cart
+    except ObjectDoesNotExist:
+        print("User ", request.session['userID'], 'has no cart')
+        c=Cart(user=User.objects.get(id=request.session['userID']))
+        c.save()
+        return redirect('/cart/')
+    if len(User.objects.get(id=request.session['userID']).cart.items.all())==0:
+        print('Cannot checkout on an empty cart')
+        return redirect('/cart/')
     print('Checking out')
-    return redirect('/cart/')
+    return redirect('/processCheckout/')
 
 def processCheckout(request):
     print('Processing Checkout')
+    if 'loggedIn' not in request.session:
+        return redirect('/login_page/')
+    if request.session['loggedIn']==False:
+        return redirect('/login_page/')
+    if 'userID' not in request.session:
+        return redirect('/login_page/')
+    try:
+        User.objects.get(id=request.session['userID']).cart
+    except ObjectDoesNotExist:
+        print("User ", request.session['userID'], 'has no cart')
+        c=Cart(user=User.objects.get(id=request.session['userID']))
+        c.save()
+        return redirect('/cart/')
+    if len(User.objects.get(id=request.session['userID']).cart.items.all())==0:
+        print('Cannot checkout on an empty cart')
+        return redirect('/cart/')
+
+    cart=User.objects.get(id=request.session['userID']).cart
+    
+    
+
+    return redirect('/cart/')
