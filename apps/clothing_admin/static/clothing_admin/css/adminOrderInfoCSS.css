@@ -1,0 +1,56 @@
+div.order_info p.order_no{
+    font-size:22pt;
+}
+div.order_info{
+    margin-left:50px;
+    margin-top:30px;
+}
+div.order_info p{
+    font-size:14pt;
+}
+div.order_info p span.bold{
+    font-weight:bold;
+    font-size:15pt;
+}
+div.order_info form select{
+    font-size:14pt;
+    width:150px;
+}
+div.order_info form input{
+    font-size:14pt;
+    margin-left:25px;
+    background:rgb(0,154,199);
+    color:rgb(241,244,248);
+    padding:3px 14px;
+    border-radius:6px;
+}
+div.order_info form input:hover{
+    background:rgb(0, 106, 138);
+    color:rgb(167, 168, 170);
+}
+div.holding_table p.total{
+    font-size:23pt;
+}
+td img{
+    height:125px;
+    width:125px;
+}
+div.holding_table{
+    margin:30px 50px;
+}
+th{
+    font-size:14pt;
+    font-weight:bold;
+}
+td{
+    font-size:12pt;
+}
+tr:hover{
+    background:rgb(216, 216, 255);
+}
+div.placeholder p.green{
+    color:green;
+    font-size:13pt;
+    margin-left:50px;
+    margin-top:5px;
+}

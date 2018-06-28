@@ -1,0 +1,130 @@
+:root{
+    --dark_blue:rgb(60,76,91);
+    /* --wrapper_gray:rgb(79,91,106); */
+    --wrapper_gray:rgb(130,138,149);
+    --diag:repeating-linear-gradient(135deg,
+    var(--dark_blue),
+    var(--dark_blue) 20px,
+    var(--wrapper_gray) 20px,
+    var(--wrapper_gray) 35px);
+}
+div.claim_shirt{
+    height:400px;
+    width:fit-content;
+    margin:auto;
+}
+div.claim_shirt img{
+    height:400px;
+}
+div.claim_shirt a{
+    display:block;
+    /* width:fit-content; */
+    text-align:center;
+    font-size:15pt;
+    /* color:rgb(247, 135, 35); */
+    /* border:2px solid rgb(247, 135, 35); */
+    color:rgb(0, 154, 199);
+    border:3px solid rgb(0, 154, 199);
+    /* margin:auto; */
+    margin-left:40px;
+    margin-right:40px;
+    padding:4px 10px;
+    position:relative;
+    bottom:60px;
+    font-weight:bold;
+    border-radius:8px;
+}
+div.claim_shirt a:hover{
+    background:rgb(241,244, 248);
+    text-decoration:none;
+}
+div.products_label{
+    background:rgb(241, 241, 241);
+    padding-top:10px;
+    padding-bottom:10px;
+    margin-bottom:40px;
+}
+div.products_label p.green{
+    font-size:13pt;
+    color:green;
+    font-style:italic;
+}
+div.products_label p{
+    color:rgb(151,151,151);
+    /* margin:auto; */
+    /* width:fit-content; */
+    text-align:center;
+    font-size:26pt;
+    font-weight:bold;
+}
+div.products div.product{
+    margin-bottom:30px;
+}
+div.products div.product a{
+    /* width:fit-content; */
+    display:block;
+    text-align:center;
+    /* margin:auto; */
+}
+div.products div.product img{
+    width:250px;
+    height:270px;
+    display:inline-block;
+    margin:auto;
+    border:3px solid rgb(151,151,151);
+}
+div.products div.product p{
+    color:rgb(241,244,248);
+    text-align:center;
+}
+div.products div.product p.product_name{
+    font-size:16pt;
+    font-weight:bold;
+}
+div.products div.product p.product_price{
+    font-size:14pt;
+}
+
+@media only screen and (max-width:480px){
+    div.claim_shirt img{
+        width:100%;
+    }
+    p.only_desktop{
+        display:none;
+    }
+}
+@media only screen and (min-width:1024px){
+    div.claim_shirt{
+        display:inline-block;
+        border:3px solid rgb(241,244,248);
+        height:550px;
+        width:375px;
+        margin:30px;
+        margin-top:85px;
+    }
+    div.products{
+        width:585px;
+        display:inline-block;
+        vertical-align: top;
+        margin-top:20px;
+    }
+    div.products div.product{
+        display:inline-block;
+        margin:10px 20px;
+    }
+    p.only_desktop{
+        font-size:24pt;
+        color:rgb(37,37,45);
+        font-weight:bold;
+    }
+    div.products div.product p{
+        color:rgb(37,37,45);
+    }
+    div.claim_shirt img{
+        height:100%;
+        width:100%;
+    }
+    div.products_label{
+        display:none;
+    }
+}

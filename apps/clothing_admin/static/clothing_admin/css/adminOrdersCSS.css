@@ -1,0 +1,36 @@
+
+div.holding_table{
+    margin:20px 30px;
+    font-size:12pt;
+}
+div.holding_table table th{
+    font-weight:bold;
+}
+div.holding_table table tr:hover{
+    background:rgb(207, 228, 255);
+}
+div.sort_row>*{
+    display:inline-block;
+}
+form.searchGroup{
+    float:right;
+    margin-right:15px;
+    margin-top:15px;
+    margin-bottom:20px;
+}
+form.searchGroup input{
+    width:350px;
+    font-size:12pt;
+    padding:3px;
+    border-radius:4px;
+}
+form.searchGroup input.submit{
+    width:fit-content;
+    background:rgb(0,154, 199);
+    color:rgb(241,244,248);
+    padding:4px 12px;
+    margin-left:15px;
+    font-weight:bold;
+    font-size:14pt;
+    border-radius:6px;
+}

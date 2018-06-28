@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clothing Dojo Add Product</title>
+    {% load static %}
+    <link rel='stylesheet' type='text/css' href='{% static 'clothing_admin/css/adminHeaderCSS.css' %}'>
+    <link rel='stylesheet' type='text/css' href='{% static 'clothing_admin/css/adminNewProductCSS.css' %}'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href='{% static 'clothing_admin/css/proxima_nova/fonts/fonts.css' %}'/>
+    <script>
+        function attach_remove_handlers(){
+            $('div.colors div a.rem').click(function(){
+                $(this).parent().remove();
+                count-=1;
+                console.log('Count: '+count)
+                // toPut=count-1;
+                $('#num_colors').attr('value', count)
+                return false;
+            })
+        }
+        $(document).ready(function(){
+            count=1
+            attach_remove_handlers();
+            $('#add_new').click(function(){
+                count+=1;
+                console.log('Count: '+count)
+                $('.colors').append('<div><input class=\'color\' type=\'text\' name=\'color_'+count+'\' placeholder=\'color\'><a class=\'rem\' href=\'#\'>&#10005;</a></div>');
+                $('a.rem').off()
+                attach_remove_handlers();
+                $('#num_colors').attr('value', count)
+                // count+=1;
+                return false;
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class='wrapper'>
+        <div class='header'>
+            <img src='{% static 'clothing_admin/images/logo.png' %}'>
+            <p class='title'>Clothing Dojo</p>
+            <div class='navbar-top'>
+                <a href='/admin/logout'>Logout</a>
+                <p>Welcome, Ashwin</p>
+            </div>
+        </div>
+        <div class='navbar-bottom'>
+            <div class='row'>
+                <a class='col-sm-4 col-md-4 col-lg-4' href='/admin/orders/'>Orders</a>
+                <a class='col-sm-4 col-md-4 col-lg-4' href='/admin/products/'>Edit Products</a>
+                <a class='col-sm-4 col-md-4 col-lg-4' href='/admin/batchInfo/'>Batch Information</a>
+            </div>
+        </div>
+
+        <div class='holding_form'>
+            <form action='/admin/processNew/' method='post'>
+                {% csrf_token %}
+                <h2>Add Product</h2>
+                <p>Product Name:</p>
+                {% for message in product_name_errors %}
+                    <p class='red'>{{message}}</p>
+                {% endfor %}
+                <input type='text' name='product_name' placeholder='name' value='{{product_name}}'>
+                <p>Image Path:</p>
+                {% for message in image_path_errors %}
+                    <p class='red'>{{message}}</p>
+                {% endfor %}
+                <input type='text' name='image_path' placeholder='image path' value='{{image_path}}'>
+                <p>Colors:</p>
+                {% for message in color_errors %}
+                    <p class='red'>{{message}}</p>
+                {% endfor %}
+                <div class='colors'>
+                    <div>
+                        <input class='color' type='text' name='color_1' placeholder='color'>
+                    </div>
+                    <input type='hidden' value='1' name='num_colors' id='num_colors'>
+                </div>
+                <a id='add_new' href='#'>Add Another Color</a>
+                <p>Price: </p>
+                {% for message in price_errors %}
+                    <p class='red'>{{message}}</p>
+                {% endfor %}
+                <input type='text' name='price' placeholder='$' value='{{price}}'>
+                <p>Description: </p>
+                {% for message in description_errors %}
+                    <p class='red'>{{message}}</p>
+                {% endfor %}
+                <textarea name='description'></textarea>
+                <input class='submit' type='submit' value='Add Product'>
+                <!-- TAKE THIS TO CONFIRMATION PAGE DISPLAYING ALL PRODUCT INFO -->
+            </form>
+        </div>
+
+        <div class='footer'>
+            <p>Property of Coding Dojo</p>
+        </div>
+
+    </div>
+</body>
+</html>

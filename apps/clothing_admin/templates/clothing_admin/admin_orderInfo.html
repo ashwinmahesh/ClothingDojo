@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clothing Dojo Admin-Order Info</title>
+    {% load static %}
+    <link rel='stylesheet' type='text/css' href='{% static 'clothing_admin/css/adminHeaderCSS.css' %}'>
+    <link rel='stylesheet' type='text/css' href='{% static 'clothing_admin/css/adminOrderInfoCSS.css' %}'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href='{% static 'clothing_admin/css/proxima_nova/fonts/fonts.css' %}'/>
+    <script>
+        $(document).ready(function(){
+            if('{{order.status}}'=='Unclaimed'){
+                $('#unclaimed').attr('selected','selected')
+            }
+            else{
+                $('#claimed').attr('selected', 'selected')
+            }
+            $('form').submit(function(){
+                $.ajax({
+                method:'POST',
+                url:'/admin/changeStatus/{{order.id}}/',
+                data:$(this).serialize()
+            })
+            .done(function(response){
+                    $('.placeholder').html('<p class=\'green\'>Status successfully changed</p>')
+                });
+            return false;
+            })
+        });
+    </script>
+</head>
+<body>
+    <div class='wrapper'>
+        <div class='header'>
+            <img src='{% static 'clothing_admin/images/logo.png' %}'>
+            <p class='title'>Clothing Dojo</p>
+            <div class='navbar-top'>
+                <a href='/admin/logout'>Logout</a>
+                <p>Welcome, Ashwin</p>
+            </div>
+        </div>
+        <div class='navbar-bottom'>
+            <div class='row'>
+                <a class='col-xs-4 col-sm-4 col-md-4 col-lg-4' href='/admin/orders/'>Orders</a>
+                <a class='col-xs-4 col-sm-4 col-md-4 col-lg-4' href='/admin/products/'>Edit Products</a>
+                <a class='col-xs-4 col-sm-4 col-md-4 col-lg-4' href='/admin/batchInfo/'>Batch Information</a>
+            </div>
+        </div>
+        
+        <div class='order_info'>
+            <p class='order_no'>Order No. 1</h1>
+            <p><span class='bold'>Date Placed: </span>{{order.created_at}}</p>
+            <p><span class='bold'>Customer Name: </span>{{order.first_name}} {{order.last_name}}</p>
+            <p><span class='bold'>Email: </span>{{order.email}}</p>
+            <p><span class='bold'>Location: </span>{{order.location.name}}</p>
+            <p><span class='bold'>Cohort: </span>{{order.cohort.name}}</p>
+            <p><span class='bold'>Order Status:</span></p>
+            <form method='post'>
+                {% csrf_token %}
+                <select name='status'>
+                    <option id='unclaimed' value='Unclaimed'>Unclaimed</option>
+                    <option id='claimed' value='Claimed'>Claimed</option>
+                </select>
+                <input type='submit' value='Confirm'>
+            </form>
+        </div>
+        <div class='placeholder'></div>
+        <div class='holding_table'>
+            <table class='table'>
+                <thead>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Size</th>
+                    <th>Color</th>
+                    <th>Cost per Item</th>
+                    <th>Quantity</th>
+                    <th>Item Total</th>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                        <tr>
+                            <td><img src={{item.product.image_path}} alt='Product image'></td>
+                            <td>{{item.product.name}}</td>
+                            <td>{{item.size}}</td>
+                            <td>{{item.color}}</td>
+                            <td>${{item.product.cost}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>${{item.total}}</td>
+                        </tr>
+
+                    {% endfor %}
+                
+                </tbody>
+            </table>
+            <p class='total'>Total: ${{order.total}}</p>
+        </div>
+        <div class='footer'>
+            <p>Property of Coding Dojo</p>
+        </div>
+
+    </div>
+</body>
+</html>

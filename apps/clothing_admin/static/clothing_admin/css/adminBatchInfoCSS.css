@@ -1,0 +1,104 @@
+div.body{
+    width:330px;
+    border:1px solid black;
+    margin:auto;
+    margin-top:20px;
+    padding:25px 50px;
+    background:rgb(79,91, 106);
+    border:2px solid rgb(235,235,235);
+    border-radius:10px;
+}
+
+div.body p{
+    margin-top:0px;
+    font-size:24pt;
+    color:rgb(241,244,248);
+    font-family: 'Roboto Mono', monospace;
+    font-weight:bold;
+    text-align:center;
+   
+}
+div.body a{
+    background:none;
+    border:2px solid rgb(241,244,248);
+    color:rgb(241,244,248);
+    font-size:20pt;
+    display:block;
+    text-align:center;
+    margin:15px 0px;
+    padding:2px;
+    border-radius:5px;
+}
+div.body a:hover{
+    background:rgb(241,244,248);
+    color:rgb(79,91, 106);
+    text-decoration:none;
+}
+div.location_info{
+    margin:20px 40px;
+}
+div.location_info p.title{
+    font-size:24pt;
+}
+div.location_info a{
+    font-size:20pt;
+    /* background:rgb(245, 166,35); */
+    background:rgb(255,86,86);
+    color:rgb(241,244,248);
+    padding:8px 30px;
+    border-radius:8px;
+}
+div.location_info a:hover{
+    background:rgb(167, 56, 56);
+    color:rgb(173, 175, 177);
+    text-decoration:none;
+}
+div.final_container{
+    margin:25px 50px;
+}
+div.final_container p{
+    font-size:16pt;
+}
+div.final_container p.title{
+    font-size:26pt;
+    font-weight:bold;
+}
+div.final_container p.last{
+    margin-bottom:30px;
+}
+div.final_container a{
+    font-size:18pt;
+    color:rgb(241,244,248);
+    padding:8px 20px;
+    margin-top:25px;
+    border-radius:7px;
+    text-decoration:none;
+}
+div.final_container a:hover{
+    text-decoration:none;
+    color:rgb(180, 180, 180);
+}
+div.final_container a.blue{
+    background:rgb(0,154,199);
+    margin-right:10px;
+    margin-top:25px;
+}
+div.final_container a.red{
+    background:rgb(255,86,86);
+    margin-left:10px;
+    margin-top:25px;
+}
+div.final_container a.blue:hover{
+    background:rgb(0, 107, 139);
+}
+div.final_container a.red:hover{
+    background:rgb(165, 54, 54);
+}
+p.green{
+    color:rgb(0, 180, 0);
+    font-style:italic;
+    font-size:18pt;
+    width:fit-content;
+    margin:auto;
+    margin-top:20px;
+}
