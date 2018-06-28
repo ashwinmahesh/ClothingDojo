@@ -12,3 +12,18 @@ td{
 p.billings{
     font-size:19pt;
 }
+p.update{
+    font-size:14pt;
+}
+div.location_info button{
+    background:rgb(127,211,34);
+    /* color:rgb(241,244,248); */
+    font-size:14pt;
+    text-decoration:none;
+    padding:4px 8px;
+    border-radius:5px;
+}
+div.location_info button:hover{
+    background:rgb(65, 117,5);
+    color:rgb(61, 61, 61);
+}

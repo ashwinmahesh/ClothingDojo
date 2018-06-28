@@ -223,13 +223,16 @@ def viewLocation(request, location_id):
     if len(Location.objects.filter(id=location_id))==0:
         print('Attempting to access location that does not exist')
         return redirect('/admin/batchInfo/')
+    if len(Location.objects.get(id=location_id).batches.all())==0:
+        Batch.objects.create(location=Location.objects.get(id=location_id))
     context={
-        'location':Location.objects.get(id=location_id)
+        'location':Location.objects.get(id=location_id),
+        'batches':Location.objects.get(id=location_id).batches.all().order_by('-created_at')
     }
     return render(request, 'clothing_admin/admin_viewLocation.html', context)
 
 def viewBatch(request, batch_id):
-    if len(Location.objects.filter(id=batch_id))==0:
+    if len(Batch.objects.filter(id=batch_id))==0:
         print('Attempting to access batch that does not exist')
         return redirect('/admin/batchInfo/')
     batch_total=0
@@ -238,32 +241,39 @@ def viewBatch(request, batch_id):
         batch_total+=item.total
     context={
         'batch':Batch.objects.get(id=batch_id),
+        'items':Batch.objects.get(id=batch_id).items.all().order_by('product','color'),
         'batch_total':batch_total
     }
     return render(request,'clothing_admin/admin_viewBatch.html', context)
 
-def batchConfirm(request, location_id):
-    if len(Location.objects.filter(id=location_id))==0:
+def batchConfirm(request, batch_id):
+    if len(Batch.objects.filter(id=batch_id))==0:
         print('Attempting to access location that does not exist')
         return redirect('/admin/batchInfo/')
     context={
-        'location':Location.objects.get(id=location_id)
+        'batch':Batch.objects.get(id=batch_id)
     }
     return render(request,'clothing_admin/admin_batchConfirm.html', context)
 
-def finalizeBatch(request, location_id):
-    if len(Location.objects.filter(id=location_id))==0:
+def finalizeBatch(request, batch_id):
+    if len(Batch.objects.filter(id=batch_id))==0:
         print('Attempting to access location that does not exist')
         return redirect('/admin/batchInfo/')
-    # batch=Location.objects.get(id=location_id).batches.last()
-    # batch.status='closed'
+    if(Batch.objects.get(id=batch_id).status=='Closed'):
+        print('This batch is already closed')
+        return redirect('/admin/batchInfo/')
     
-    # Close this batch then open a new one
+    b=Batch.objects.get(id=batch_id)
+    b.status='Closed'
+    b.save()
+    location=Batch.objects.get(id=batch_id).location
+    Batch.objects.create(location=location)
     e=getFromSession(request.session['flash'])
     e.addMessage('Batch successfully finalized', 'batch_success')
     request.session['flash']=e.addToSession()
     print('Batch successfully finalized')
-    return redirect('/admin/batchInfo/')
+    string='/admin/batchInfo/viewLocation/'+str(location.id)+'/'
+    return redirect(string)
 
 def test(request):
     return render(request, 'clothing_admin/test.html')

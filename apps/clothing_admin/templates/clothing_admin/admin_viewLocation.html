@@ -33,7 +33,7 @@
         </div>
         <div class='body'>
                 <p>{{location.name}}</p>
-                {% for batch in location.batches.all %}
+                {% for batch in batches %}
                     <a href='/admin/batchInfo/viewBatch/{{batch.id}}/'>{{batch.created_at}}</a>
                 {% endfor %}   
             </div>

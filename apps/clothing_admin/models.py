@@ -57,7 +57,7 @@ class Cohort(models.Model):
 class Batch(models.Model):
     location=models.ForeignKey(Location, related_name='batches')
     status=models.CharField(max_length=50, default='Open')
-    created_at=models.DateField(auto_now_add=True)
+    created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
 
 class BatchItem(models.Model):

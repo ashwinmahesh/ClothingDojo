@@ -36,12 +36,14 @@
         <div class='location_info'>
             <p class='title'>{{batch.location.name}} - {{batch.created_at}}</p>
             <p class='billings'>Total Billings: ${{batch_total}}</p>
+            <p class='update'>Last Updated: {{batch.updated_at}}</p>
             <p class='status'>Status: {{batch.status}}</p>
+            <button onclick="exceller()">DOWNLOAD EXCEL</button>
             
-            <table class='table'>
+            <table id='batch' class='table'>
                 <thead>
                     <th>Product id</th>
-                    <th>Image</th>
+                    <!-- <th>Image</th> -->
                     <th>Product Name</th>
                     <th>Color</th>
                     <th>Size</th>
@@ -50,10 +52,10 @@
                     <th>Item Total</th>
                 </thead>
                 <tbody>
-                    {% for item in batch.items.all %}
+                    {% for item in items %}
                         <tr>
                             <td>{{item.product.id}}</td>
-                            <td><img src='{{item.product.image_path}}' alt='Product image'></td>
+                            <!-- <td><img src='{{item.product.image_path}}' alt='Product image'></td> -->
                             <td>{{item.product.name}}</td>
                             <td>{{item.color.name}}</td>
                             <td>{{item.size}}</td>
@@ -72,5 +74,30 @@
             <p>Property of Coding Dojo</p>
         </div>
     </div>
+
+
+    <script>
+        function exceller() {
+            var uri = 'data:application/vnd.ms-excel;base64,',
+            template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+            base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            },
+            format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                return c[p];
+                })
+            }
+            var toExcel = document.getElementById("batch").innerHTML;
+            var ctx = {
+            worksheet: name || '',
+            table: toExcel
+            };
+            var link = document.createElement("a");
+            link.download = "BatchInfo_{{batch.location.name}}_{{batch.created_at}}.xls";
+            link.href = uri + base64(format(template, ctx))
+            link.click();
+        }
+    </script>
 </body>
 </html>

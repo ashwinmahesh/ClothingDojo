@@ -33,12 +33,12 @@
         </div>
 
         <div class='final_container'>
-            <p class='title'>{{location.name}}</p>
+            <p class='title'>{{batch.location.name}}</p>
             <p>Are you sure you want to finalize this batch?</p>
             <p>This will prevent users from placing orders until the next batch is opened.</p>
             <p class='last'>This action cannot be reverted.</p>
-            <a class='blue' href='/admin/batchInfo/viewLocation/{{location.id}}/'>Go Back</a>
-            <a class='red' href='/admin/finalizeBatch/{{location.id}}/'>Confirm</a>
+            <a class='blue' href='/admin/batchInfo/viewBatch/{{batch.id}}/'>Go Back</a>
+            <a class='red' href='/admin/finalizeBatch/{{batch.id}}/'>Confirm</a>
         </div>
 
         <div class='footer'>

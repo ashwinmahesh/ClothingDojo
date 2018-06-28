@@ -5,15 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Test Area</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="tableExport.js"></script>
+    <script type="text/javascript" src="jquery.base64.js"></script>
+    
 </head>
 <body>
-    <form action='/admin/processTest/' method='post'>
-        {% csrf_token %}
-        <p>Colors</p>
-        <input type='text' name='color'>
-        <input type='text' name='color'>
-        <input type='text' name='color'>
-        <input type='submit' value='test'>
-    </form>
+    <table id='toExport'>
+        <thead>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Ashwin</td>
+                <td>Mahesh</td>
+                <td>Ashwin@email.com</td>
+            </tr>
+            <tr>
+                <td>Michael</td>
+                <td>Choi</td>
+                <td>mc@michael.choi</td>
+            </tr>
+        </tbody>
+    </table>
+    <button onclick="exceller()">EXCEL</button>
+
+    <script>
+        function exceller() {
+            var uri = 'data:application/vnd.ms-excel;base64,',
+            template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+            base64 = function(s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            },
+            format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                return c[p];
+                })
+            }
+            var toExcel = document.getElementById("toExport").innerHTML;
+            var ctx = {
+            worksheet: name || '',
+            table: toExcel
+            };
+            var link = document.createElement("a");
+            link.download = "export.xls";
+            link.href = uri + base64(format(template, ctx))
+            link.click();
+        }
+    </script>
+    
 </body>
 </html>
