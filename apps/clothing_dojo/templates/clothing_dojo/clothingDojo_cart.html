@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clothing Dojo - Cart</title>
+    {% load static %}
+    <link rel='stylesheet' type='text/css' href='{% static 'clothing_dojo/css/cdHeaderCSS.css' %}'>
+    <link rel='stylesheet' type='text/css' href='{% static 'clothing_dojo/css/cdCartCSS.css' %}'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href='{% static 'clothing_dojo/css/proxima_nova/fonts/fonts.css' %}'/>
+</head>
+<body>
+    <div class='wrapper'>
+        <div class='header'>
+            <img src='{% static 'clothing_admin/images/logo.png' %}'>
+            <p class='title'>Clothing Dojo</p>
+        </div>
+        <div class='navbar'>
+            <a class='cart' href='/cart/'><img src='{% static 'clothing_dojo/images/cart.png' %}' alt='Cart'></a>
+            <a class='platform' href='/logout/'>PLATFORM</a>
+            <p>Welcome, {{user.first_name}}</p>
+        </div>
+        <div class='body'>
+            <a class='back' href='/'>BACK</a>
+            <p>Your Cart</p>
+            {% for message in cart_success %}
+                <p class='green'>{{message}}</p>
+            {% endfor %}
+            <!-- <a href='#'>Update Cart</a> -->
+            <!-- TABLE ONLY ON DESKTOP -->
+            <div class='holding_table'>
+            <table class='table'>
+                <thead>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Color</th>
+                    <th>Size</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Item Total</th>
+                    <th>Remove</th>
+                </thead>
+                <tbody>
+                    {% for item in cart.items.all %}
+                        <tr>
+                            <td><a href='/product/{{item.product.id}}/'><img src='{{item.product.image_path}}' alt='Product image'></a></td>
+                            <td>{{item.product.name}}</td>
+                            <td>{{item.color.name}}</td>
+                            <td>{{item.size}}</td>
+                            <td>${{item.product.cost}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>${{item.total}}</td>
+                            <td><a href='/removeCart/{{item.id}}/'>X</a></td>
+                        </tr> 
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class='items'>
+                {% for item in cart.items.all %}
+                    <div class='item'>
+                        <a href='/product/{{item.product.id}}/'><img src='{{item.product.image_path}}' alt='Product image'></a>
+                        <div class='info'>
+                            <p class='no'>{{item.product.name}}</p><a href='/removeCart/{{item.id}}/'>X</a>
+                            <p>Color: {{item.color.name}}</p>
+                            <p>Size: {{item.size}}</p>
+                            <p>Quantity: {{item.quantity}} x ${{item.product.cost}} ea</p>
+                        </div>
+                        <div class='q_and_p'>
+                            
+                        </div>
+                        <p>Item Total: ${{item.total}}</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <p class='total'>Total: ${{cart.total}}</p>
+            </div>
+            
+            <div class='holding_right'>
+                <div class='right'>
+                    <p class='big'>Order Summary</p>
+                    <p>Subtotal ({{count}} items): ${{cart.total}}</p>
+                    <p>Shipping: FREE</p>
+                    <p>Tax: Calculated at Checkout</p>
+                    <p class='medium'>Estimated Total: ${{cart.total}}</p>
+                    
+                    <a href='/checkout/'>Secure Checkout</a>
+                </div>
+            </div>
+            <!-- <p class='total'>Total: ${{cart.total}}</p> -->
+        </div>
+        <div class='footer'>
+            <p>Property of Coding Dojo</p>
+        </div>
+    </div>
+</body>
+</html>

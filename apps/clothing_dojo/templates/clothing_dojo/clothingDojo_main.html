@@ -12,12 +12,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    
     <link rel="stylesheet" type="text/css" href='{% static 'clothing_dojo/css/proxima_nova/fonts/fonts.css' %}'/>
     <script>
         function checkWidth(){
             var width=$(window).width();
-
             if(width>=1024){
                 $('.claim_shirt img').attr('src', '{% static 'clothing_dojo/images/claim_3.jpg' %}');
             }
@@ -46,9 +44,9 @@
             <p class='title'>Clothing Dojo</p>
         </div>
         <div class='navbar'>
-            <a class='cart' href='#'><img src='{% static 'clothing_dojo/images/cart.png' %}' alt='Cart'></a>
-            <a class='platform' href='https://learn.codingdojo.com/'>PLATFORM</a>
-            <p>Welcome, Ashwin</p>
+            <a class='cart' href='cart/'><img src='{% static 'clothing_dojo/images/cart.png' %}' alt='Cart'></a>
+            <a class='platform' href='/logout/'>PLATFORM</a>
+            <p>Welcome, {{user.first_name}}</p>
         </div>
         <div class='body'>
             <div class='claim_shirt'>
@@ -56,9 +54,6 @@
                 <a href='#'>Claim Free Shirt Now!</a>
             </div>
             <div class='products_label'>
-                {% for message in cart_success %}
-                    <p class='green'>{{message}}</p>
-                {% endfor %}
                 <p>PRODUCTS</p>
             </div>
             <div class='products'>

@@ -9,15 +9,17 @@ class User(models.Model):
     email=models.CharField(max_length=255)
     claimed_shirt=models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
+    password=models.CharField(max_length=255, null=True)
+    cohort=models.ForeignKey(Cohort, related_name='students', null=True)
 
 class Cart(models.Model):
-    user_id=models.IntegerField(null=False)
-    total=models.IntegerField(default=0)
+    user=models.OneToOneField(User, primary_key=True, null=False)
+    total=models.DecimalField(max_digits=9, decimal_places=2, default=0)
 
 class CartItem(models.Model):
     cart=models.ForeignKey(Cart, related_name='items')
     product=models.ForeignKey(Product, related_name='cart_items')
-    color=models.CharField(max_length=255)
+    color=models.ForeignKey(Color, related_name='cart_items')
     size=models.CharField(max_length=3)
     quantity=models.IntegerField()
     total=models.DecimalField(max_digits=8, decimal_places=2, default=0)
@@ -27,6 +29,7 @@ class Order(models.Model):
     first_name=models.CharField(max_length=255)
     last_name=models.CharField(max_length=255)
     email=models.CharField(max_length=255)
+    user=models.ForeignKey(User, related_name='orders', null=True)
     # cohort=models.CharField(max_length=255)
     cohort=models.ForeignKey(Cohort, related_name='orders')
     total=models.DecimalField(max_digits=9, decimal_places=2)

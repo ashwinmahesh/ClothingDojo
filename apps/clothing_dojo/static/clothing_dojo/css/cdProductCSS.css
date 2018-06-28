@@ -18,9 +18,7 @@ div.product_info select{
     color:black;
 }
 div.wrapper{
-    /* background:rgb(151,151,151); */
     background:linear-gradient(rgb(151,151,151), rgb(241,241,241));
-    /* background:var(--diag); */
 }
 div.product_info{
     border-radius:10px;
