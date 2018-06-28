@@ -232,10 +232,13 @@ def viewBatch(request, batch_id):
     if len(Location.objects.filter(id=batch_id))==0:
         print('Attempting to access batch that does not exist')
         return redirect('/admin/batchInfo/')
+    batch_total=0
+    b=Batch.objects.get(id=batch_id)
+    for item in b.items.all():
+        batch_total+=item.total
     context={
-        'batch':Batch.objects.get(id=batch_id)
-        # 'location':Location.objects.get(id=location_id),
-        # 'batch':Location.objects.get(id=location_id).batches.last()
+        'batch':Batch.objects.get(id=batch_id),
+        'batch_total':batch_total
     }
     return render(request,'clothing_admin/admin_viewBatch.html', context)
 

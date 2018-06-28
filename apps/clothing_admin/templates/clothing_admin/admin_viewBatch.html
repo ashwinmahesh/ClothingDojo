@@ -7,6 +7,7 @@
     <title>Clothing Dojo Admin - View Location {{location.name}}</title>
     {% load static %}
     <link rel='stylesheet' type='text/css' href='{% static 'clothing_admin/css/adminHeaderCSS.css' %}'>
+    <link rel='stylesheet' type='text/css' href='{% static 'clothing_admin/css/adminViewBatchCSS.css' %}'>
     <link rel='stylesheet' type='text/css' href='{% static 'clothing_admin/css/adminBatchInfoCSS.css' %}'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -34,13 +35,14 @@
 
         <div class='location_info'>
             <p class='title'>{{batch.location.name}} - {{batch.created_at}}</p>
+            <p class='billings'>Total Billings: ${{batch_total}}</p>
             <p class='status'>Status: {{batch.status}}</p>
             
             <table class='table'>
                 <thead>
-                    <th>id</th>
+                    <th>Product id</th>
                     <th>Image</th>
-                    <th>Name</th>
+                    <th>Product Name</th>
                     <th>Color</th>
                     <th>Size</th>
                     <th>Price</th>
@@ -48,7 +50,18 @@
                     <th>Item Total</th>
                 </thead>
                 <tbody>
-                    
+                    {% for item in batch.items.all %}
+                        <tr>
+                            <td>{{item.product.id}}</td>
+                            <td><img src='{{item.product.image_path}}' alt='Product image'></td>
+                            <td>{{item.product.name}}</td>
+                            <td>{{item.color.name}}</td>
+                            <td>{{item.size}}</td>
+                            <td>${{item.product.cost}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>${{item.total}}</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             {% ifequal batch.status 'Open' %}

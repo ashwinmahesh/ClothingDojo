@@ -183,13 +183,23 @@ def processCheckout(request):
     o=Order(user=User.objects.get(id=request.session['userID']), total=0, location=User.objects.get(id=request.session['userID']).cohort.location)
     o.save()
     for item in cart.items.all():
-        ot=OrderItem.objects.create(product=item.product, order=o, size=item.size, color=item.size, quantity=item.quantity, total=item.total)
+        ot=OrderItem.objects.create(product=item.product, order=o, size=item.size, color=item.color, quantity=item.quantity, total=item.total)
         o.total+=ot.total
         o.num_items+=ot.quantity
         p=ot.product
         p.num_sold+=ot.quantity
         p.save()
     o.save()
+    location=User.objects.get(id=request.session['userID']).cohort.location
+    for item in o.items.all():
+        if len(location.batches.last().items.filter(product=item.product, size=item.size, color=item.color))==0:
+            bt=BatchItem.objects.create(product=item.product, batch=location.batches.last(), size=item.size, color=item.color, quantity=item.quantity, total=item.total)
+        else:
+            bt=location.batches.last().items.get(product=item.product, size=item.size, color=item.color)
+            bt.quantity+=item.quantity
+            bt.total+=item.total
+            bt.save()
+
     print('Checkout successful')
     cart.delete()
     return redirect('/cart/')
@@ -239,6 +249,15 @@ def processClaim(request):
     user=User.objects.get(id=request.session['userID'])
     user.claimed_shirt=True
     user.save()
+
+    location=User.objects.get(id=request.session['userID']).cohort.location
+    if len(location.batches.last().items.filter(product=shirt, size=request.POST['size'], color=Color.objects.get(id=request.POST['color'])))==0:
+        bt=BatchItem.objects.create(product=shirt, batch=location.batches.last(), size=request.POST['size'], color=Color.objects.get(id=request.POST['color']), quantity=1, total=0)
+    else:
+        bt=location.batches.last().items.get(product=shirt, size=request.POST['size'], color=Color.objects.get(id=request.POST['color']))
+        bt.quantity+=1
+        bt.save()
+
     e=getFromSession(request.session['flash'])
     e.addMessage('Your shirt has been successfully claimed.', 'shirt_success')
     request.session['flash']=e.addToSession()

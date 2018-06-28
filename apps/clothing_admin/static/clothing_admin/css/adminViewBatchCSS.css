@@ -1,0 +1,14 @@
+td img{
+    width:100px;
+    height:110px;
+}
+th{
+    font-size:14pt;
+    font-weight:bold;
+}
+td{
+    font-size:13pt;
+}
+p.billings{
+    font-size:19pt;
+}

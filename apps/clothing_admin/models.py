@@ -64,9 +64,11 @@ class BatchItem(models.Model):
     product=models.ForeignKey(Product, related_name='batches')
     batch=models.ForeignKey(Batch, related_name='items')
     size=models.CharField(max_length=3)
-    color=models.CharField(max_length=100)
+    # color=models.CharField(max_length=100)
+    color=models.ForeignKey(Color, related_name='batch_items')
     quantity=models.IntegerField()
     total=models.DecimalField(max_digits=8, decimal_places=2, default=0)
     created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
 
 # Create your models here.
