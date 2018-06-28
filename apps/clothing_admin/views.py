@@ -224,10 +224,20 @@ def viewLocation(request, location_id):
         print('Attempting to access location that does not exist')
         return redirect('/admin/batchInfo/')
     context={
-        'location':Location.objects.get(id=location_id),
-        'batch':Location.objects.get(id=location_id).batches.last()
+        'location':Location.objects.get(id=location_id)
     }
-    return render(request,'clothing_admin/admin_viewLocation.html', context)
+    return render(request, 'clothing_admin/admin_viewLocation.html', context)
+
+def viewBatch(request, batch_id):
+    if len(Location.objects.filter(id=batch_id))==0:
+        print('Attempting to access batch that does not exist')
+        return redirect('/admin/batchInfo/')
+    context={
+        'batch':Batch.objects.get(id=batch_id)
+        # 'location':Location.objects.get(id=location_id),
+        # 'batch':Location.objects.get(id=location_id).batches.last()
+    }
+    return render(request,'clothing_admin/admin_viewBatch.html', context)
 
 def batchConfirm(request, location_id):
     if len(Location.objects.filter(id=location_id))==0:
@@ -244,6 +254,8 @@ def finalizeBatch(request, location_id):
         return redirect('/admin/batchInfo/')
     # batch=Location.objects.get(id=location_id).batches.last()
     # batch.status='closed'
+    
+    # Close this batch then open a new one
     e=getFromSession(request.session['flash'])
     e.addMessage('Batch successfully finalized', 'batch_success')
     request.session['flash']=e.addToSession()
@@ -254,5 +266,5 @@ def test(request):
     return render(request, 'clothing_admin/test.html')
 
 def processTest(request):
-    print(request.POST);
+    print(request.POST)
     return redirect('/admin/test/')

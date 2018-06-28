@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Clothing Admin - View Batch</title>
+    <title>Clothing Dojo Admin - View Location {{location.name}}</title>
     {% load static %}
     <link rel='stylesheet' type='text/css' href='{% static 'clothing_admin/css/adminHeaderCSS.css' %}'>
-    <link rel='stylesheet' type='text/css' href='{% static 'clothing_admin/css/adminLocationInfoCSS.css' %}'>
+    <link rel='stylesheet' type='text/css' href='{% static 'clothing_admin/css/adminBatchInfoCSS.css' %}'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href='{% static 'clothing_admin/css/proxima_nova/fonts/fonts.css' %}'/>
 </head>
 <body>
-    <div class='wrapper'>
+     <div class='wrapper'>
         <div class='header'>
             <img src='{% static 'clothing_admin/images/logo.png' %}'>
             <p class='title'>Clothing Dojo</p>
@@ -31,13 +31,30 @@
                 <a class='col-xs-4 col-sm-4 col-md-4 col-lg-4' href='/admin/batchInfo/'>Batch Information</a>
             </div>
         </div>
-        <div class='body'>
-                <p>{{location.name}}</p>
-                {% for batch in location.batches.all %}
-                    <a href='/admin/batchInfo/viewBatch/{{batch.id}}/'>{{batch.created_at}}</a>
-                {% endfor %}   
-            </div>
 
+        <div class='location_info'>
+            <p class='title'>{{batch.location.name}} - {{batch.created_at}}</p>
+            <p class='status'>Status: {{batch.status}}</p>
+            
+            <table class='table'>
+                <thead>
+                    <th>id</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Color</th>
+                    <th>Size</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Item Total</th>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+            {% ifequal batch.status 'Open' %}
+                <a href='/admin/batchConfirm/{{batch.id}}/'>Finalize Batch</a>
+            {% endifequal %}
+        </div>
          <div class='footer'>
             <p>Property of Coding Dojo</p>
         </div>

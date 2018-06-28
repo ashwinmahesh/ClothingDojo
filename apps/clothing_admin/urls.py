@@ -19,6 +19,7 @@ urlpatterns=[
     url(r'^changeStatus/(?P<order_id>[0-9]\d*)/$', views.changeStatusAPI),
     url(r'^batchInfo/$', views.batchInfo),
     url(r'^batchInfo/viewLocation/(?P<location_id>[0-9]\d*)/$', views.viewLocation),
+    url(r'^batchInfo/viewBatch/(?P<batch_id>[0-9]\d*)/$', views.viewBatch),
     url(r'^batchConfirm/(?P<location_id>[0-9]\d*)/$', views.batchConfirm),
     url(r'^finalizeBatch/(?P<location_id>[0-9]\d*)/$', views.finalizeBatch),
 ]

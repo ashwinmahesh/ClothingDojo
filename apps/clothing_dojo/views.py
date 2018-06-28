@@ -207,7 +207,6 @@ def claimShirt(request):
         e.addMessage('You have already ordered your free shirt.', 'shirt_fail')
         request.session['flash']=e.addToSession()
         return redirect('/')
-    # IF ALREADY CLAIMED FLASH ALREADY CLAIMED AND REDIRECT
     context={
         'user':User.objects.get(id=request.session['userID']),
         'product':Product.objects.get(id=FREE_SHIRT_ID)

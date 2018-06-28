@@ -102,3 +102,7 @@ p.green{
     margin:auto;
     margin-top:20px;
 }
+p.status{
+    font-size:19pt;
+    color:red;
+}
