@@ -90,11 +90,6 @@ div.footer p{
         max-width:1130px;
     }
 }
-@media only screen and (min-width:1090px){
-    div.body{
-        padding:0px 30px;
-    }
-}
 @media only screen and (min-width:1024px){
     div.body{
         /* width:fit-content; */

@@ -20,6 +20,7 @@ class CartItem(models.Model):
     color=models.CharField(max_length=255)
     size=models.CharField(max_length=3)
     quantity=models.IntegerField()
+    total=models.DecimalField(max_digits=8, decimal_places=2, default=0)
     created_at=models.DateTimeField(auto_now_add=True)
 
 class Order(models.Model):
