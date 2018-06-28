@@ -60,10 +60,10 @@
                     {% for order in orders %}
                         <tr>
                             <td><a href='/admin/orderInfo/{{order.id}}/'>{{order.id}}</a></td>
-                            <td>{{order.first_name}} {{order.last_name}}</td>
-                            <td>{{order.email}}</td>
+                            <td>{{order.user.first_name}} {{order.user.last_name}}</td>
+                            <td>{{order.user.email}}</td>
                             <td>{{order.location.name}}</td>
-                            <td>{{order.cohort.name}}</td>
+                            <td>{{order.user.cohort.name}}</td>
                             <td>{{order.num_items}}</td>
                             <td>${{order.total}}</td>
                             <td>{{order.created_at}}</td>

@@ -54,12 +54,12 @@
         </div>
         
         <div class='order_info'>
-            <p class='order_no'>Order No. 1</h1>
+            <p class='order_no'>Order No. {{order.id}}</h1>
             <p><span class='bold'>Date Placed: </span>{{order.created_at}}</p>
-            <p><span class='bold'>Customer Name: </span>{{order.first_name}} {{order.last_name}}</p>
-            <p><span class='bold'>Email: </span>{{order.email}}</p>
+            <p><span class='bold'>Customer Name: </span>{{order.user.first_name}} {{order.user.last_name}}</p>
+            <p><span class='bold'>Email: </span>{{order.user.email}}</p>
             <p><span class='bold'>Location: </span>{{order.location.name}}</p>
-            <p><span class='bold'>Cohort: </span>{{order.cohort.name}}</p>
+            <p><span class='bold'>Cohort: </span>{{order.user.cohort.name}}</p>
             <p><span class='bold'>Order Status:</span></p>
             <form method='post'>
                 {% csrf_token %}
@@ -88,7 +88,7 @@
                             <td><img src={{item.product.image_path}} alt='Product image'></td>
                             <td>{{item.product.name}}</td>
                             <td>{{item.size}}</td>
-                            <td>{{item.color}}</td>
+                            <td>{{item.color.name}}</td>
                             <td>${{item.product.cost}}</td>
                             <td>{{item.quantity}}</td>
                             <td>${{item.total}}</td>

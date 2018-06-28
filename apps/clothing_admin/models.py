@@ -32,6 +32,7 @@ class Product(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     description=models.TextField(default='')
+    num_sold=models.IntegerField(default=0)
     # colors=models.ForeignKey(Color, related_name='product')
     objects=ProductManager()
 

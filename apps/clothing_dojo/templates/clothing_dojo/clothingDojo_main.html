@@ -51,9 +51,15 @@
         <div class='body'>
             <div class='claim_shirt'>
                 <img src='{% static 'clothing_dojo/images/claim_2.png' %}' alt='Image of the Coding Dojo T-Shirt'>
-                <a href='#'>Claim Free Shirt Now!</a>
+                <a href='/claim/'>Claim Free Shirt Now!</a>
             </div>
             <div class='products_label'>
+                {% for message in shirt_success %}
+                    <p class='green'>{{message}}</p>
+                {% endfor %}
+                {% for message in shirt_fail %}
+                    <p class='red'>{{message}}</p>
+                {% endfor %}
                 <p>PRODUCTS</p>
             </div>
             <div class='products'>

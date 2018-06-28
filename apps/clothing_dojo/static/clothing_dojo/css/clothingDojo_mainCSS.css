@@ -40,8 +40,13 @@ div.products_label{
     margin-bottom:40px;
 }
 div.products_label p.green{
-    font-size:13pt;
+    font-size:14pt;
     color:green;
+    font-style:italic;
+}
+div.products_label p.red{
+    font-size:14pt;
+    color:red;
     font-style:italic;
 }
 div.products_label p{

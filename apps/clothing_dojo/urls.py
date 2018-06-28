@@ -10,5 +10,7 @@ urlpatterns=[
     url(r'^cart/$', views.cart),
     url(r'^removeCart/(?P<cartitem_id>[0-9]\d*)/$', views.removeFromCart),
     url(r'^checkout/$', views.checkout),
-    url(r'^processCheckout/$', views.processCheckout)
+    url(r'^processCheckout/$', views.processCheckout),
+    url(r'^claim/$', views.claimShirt),
+    url(r'^processClaim/$', views.processClaim),
 ]

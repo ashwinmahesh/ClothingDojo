@@ -4,6 +4,8 @@ from apps.clothing_admin.models import *
 from apps.clothing_dojo.models import *
 from djangounchained_flash import ErrorManager, getFromSession
 
+FREE_SHIRT_ID=1
+
 def loginPage(request):
     return render(request, 'clothing_dojo/login_page.html')
 
@@ -33,7 +35,9 @@ def index(request):
     e=getFromSession(request.session['flash'])
     context={
         'products':Product.objects.all(),
-        'user':User.objects.get(id=request.session['userID'])
+        'user':User.objects.get(id=request.session['userID']),
+        'shirt_success':e.getMessages('shirt_success'),
+        'shirt_fail':e.getMessages('shirt_fail'),
     }
     request.session['flash']=e.addToSession()
     return render(request, 'clothing_dojo/clothingDojo_main.html', context)
@@ -106,7 +110,7 @@ def cart(request):
     if len(User.objects.get(id=request.session['userID']).cart.items.all()):
         showCheckout=1
     context={
-        'user':User.objects.get(id=request.session['userID']),
+        
         'cart_success':e.getMessages('cart_success'),
         'cart':User.objects.get(id=request.session['userID']).cart,
         'count':count,
@@ -176,7 +180,68 @@ def processCheckout(request):
         return redirect('/cart/')
 
     cart=User.objects.get(id=request.session['userID']).cart
-    
-    
-
+    o=Order(user=User.objects.get(id=request.session['userID']), total=0, location=User.objects.get(id=request.session['userID']).cohort.location)
+    o.save()
+    for item in cart.items.all():
+        ot=OrderItem.objects.create(product=item.product, order=o, size=item.size, color=item.size, quantity=item.quantity, total=item.total)
+        o.total+=ot.total
+        o.num_items+=ot.quantity
+        p=ot.product
+        p.num_sold+=ot.quantity
+        p.save()
+    o.save()
+    print('Checkout successful')
+    cart.delete()
     return redirect('/cart/')
+
+def claimShirt(request):
+    if 'loggedIn' not in request.session:
+        return redirect('/login_page/')
+    if request.session['loggedIn']==False:
+        return redirect('/login_page/')
+    if 'userID' not in request.session:
+        return redirect('/login_page/')
+    if User.objects.get(id=request.session['userID']).claimed_shirt==True:
+        print('User has already claimed shirt')
+        e=getFromSession(request.session['flash'])
+        e.addMessage('You have already ordered your free shirt.', 'shirt_fail')
+        request.session['flash']=e.addToSession()
+        return redirect('/')
+    # IF ALREADY CLAIMED FLASH ALREADY CLAIMED AND REDIRECT
+    context={
+        'user':User.objects.get(id=request.session['userID']),
+        'product':Product.objects.get(id=FREE_SHIRT_ID)
+    }
+    return render(request, 'clothing_dojo/clothingDojo_freeShirt.html', context)
+
+def processClaim(request):
+    if 'loggedIn' not in request.session:
+        return redirect('/login_page/')
+    if request.session['loggedIn']==False:
+        return redirect('/login_page/')
+    if 'userID' not in request.session:
+        return redirect('/login_page/')
+    if User.objects.get(id=request.session['userID']).claimed_shirt==True:
+        print('User has already claimed shirt')
+        e=getFromSession(request.session['flash'])
+        e.addMessage('You have already ordered your free shirt.', 'shirt_fail')
+        request.session['flash']=e.addToSession()
+        return redirect('/')
+    if request.method!='POST':
+        return redirect('/')
+    o=Order(user=User.objects.get(id=request.session['userID']), total=0, location=User.objects.get(id=request.session['userID']).cohort.location)
+    o.save()
+    shirt=Product.objects.get(id=FREE_SHIRT_ID)
+    OrderItem.objects.create(product=shirt, order=o, size=request.POST['size'], color=Color.objects.get(id=request.POST['color']), quantity=1, total=0)
+    o.num_items=1
+    shirt.num_sold+=1
+    shirt.save()
+    o.save()
+    user=User.objects.get(id=request.session['userID'])
+    user.claimed_shirt=True
+    user.save()
+    e=getFromSession(request.session['flash'])
+    e.addMessage('Your shirt has been successfully claimed.', 'shirt_success')
+    request.session['flash']=e.addToSession()
+    print('Successfully claimed shirt')
+    return redirect('/')

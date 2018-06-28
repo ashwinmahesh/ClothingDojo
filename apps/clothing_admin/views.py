@@ -24,7 +24,7 @@ def logout(request):
 
 def orders(request):
     context={
-        'orders':Order.objects.all()
+        'orders':Order.objects.all().order_by('-created_at')
     }
     return render(request, 'clothing_admin/admin_orders.html', context)
 
