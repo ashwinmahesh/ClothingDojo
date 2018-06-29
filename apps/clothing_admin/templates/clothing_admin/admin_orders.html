@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href='{% static 'clothing_admin/css/proxima_nova/fonts/fonts.css' %}'/>
     <script>
         $(document).ready(function(){
+            $('div.pages a').first().attr('class', 'current')
             $('#search').keyup(function(){
                 console.log('Catching key up')
                 $.ajax({
@@ -27,6 +28,22 @@
                     $('tbody').html(response)
                 });
             });
+
+            $('.pages a').click(function(){
+                $('#page_num').attr('value', $(this).attr('value'));
+                $('.pages a').attr('class','')
+                $(this).attr('class','current')
+                $.ajax({
+                    method:'POST',
+                    url:'/admin/searchAPI/',
+                    data:$('.searchGroup').serialize()
+                })
+                .done(function(response){
+                    console.log('Recieved response', response)
+                    $('tbody').html(response)
+                });
+                return false;
+            })
         });
     </script>
 </head>
@@ -48,16 +65,17 @@
             </div>
         </div>
         <div class='sort_row'>
-           
-            <!-- ADD SOME METHOD FOR SORTING
-            OLD TO NEW
-            SORT BY STATUS, CLAIMED/UNCLAIMED -->
-
             <form class='searchGroup'>
                 {% csrf_token %}
+                <input type='hidden' id='page_num' name='page_num' value='1'>
                 <input id='search' type='search' name='adminSearch' placeholder="Search by Name or Email">
                 <input class='submit' type='submit' value='Go'>
             </form>
+            <div class='pages'>
+                {% for page in pages %}
+                    <a href='#' value='{{page}}'>{{page}}</a>
+                {% endfor %}
+            </div>
         </div>
         <div class='holding_table'>
             <table class='table'>

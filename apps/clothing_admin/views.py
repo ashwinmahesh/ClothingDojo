@@ -3,6 +3,8 @@ from apps.clothing_admin.models import *
 from apps.clothing_dojo.models import *
 from djangounchained_flash import ErrorManager, getFromSession
 
+ORDERS_ON_PAGE=25
+
 def index(request):
     return render(request, 'clothing_admin/admin_login.html')
     
@@ -23,9 +25,18 @@ def logout(request):
     return redirect('/admin')
 
 def orders(request):
+    orders=Order.objects.all().order_by('-created_at')
+    num_pages=int(len(orders)/ORDERS_ON_PAGE)
+    if(len(orders)%ORDERS_ON_PAGE!=0):
+        num_pages+=1
+    pages=[]
+    for i in range(1, num_pages+1):
+        pages.append(i)
     context={
-        'orders':Order.objects.all().order_by('-created_at')
+        'orders':orders,
+        'pages':pages
     }
+    context['orders']=context['orders'][0:ORDERS_ON_PAGE]
     return render(request, 'clothing_admin/admin_orders.html', context)
 
 def products(request):
@@ -284,10 +295,12 @@ def searchAPI(request):
         return HttpResponse('This is an API')
     print('You are searching')
     key=request.POST['adminSearch']
-    orders=Order.objects.filter(user__first_name__startswith=key)|Order.objects.filter(user__last_name__startswith=key)|Order.objects.filter(user__email__startswith=key)
+    orders=Order.objects.filter(user__first_name__startswith=key).order_by('-created_at')|Order.objects.filter(user__last_name__startswith=key).order_by('-created_at')|Order.objects.filter(user__email__startswith=key).order_by('-created_at')
     context={
         'orders':orders
     }
+    page_num=int(request.POST['page_num'])
+    context['orders']=context['orders'][(page_num-1)*ORDERS_ON_PAGE:page_num*ORDERS_ON_PAGE]
     return render(request, 'clothing_admin/admin_API.html', context)
 
 def test(request):
