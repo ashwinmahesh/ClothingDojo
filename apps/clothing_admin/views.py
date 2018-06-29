@@ -284,13 +284,11 @@ def searchAPI(request):
         return HttpResponse('This is an API')
     print('You are searching')
     key=request.POST['adminSearch']
-    users=User.objects.filter()
-    orders=Order.objects.filter()
+    orders=Order.objects.filter(user__first_name__startswith=key)|Order.objects.filter(user__last_name__startswith=key)|Order.objects.filter(user__email__startswith=key)
     context={
         'orders':orders
     }
-    print(context)
-    return HttpResponse('Working')
+    return render(request, 'clothing_admin/admin_API.html', context)
 
 def test(request):
     return render(request, 'clothing_admin/test.html')

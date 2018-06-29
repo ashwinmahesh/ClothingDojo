@@ -267,3 +267,8 @@ def processClaim(request):
     request.session['flash']=e.addToSession()
     print('Successfully claimed shirt')
     return redirect('/')
+
+def viewOrders(request):
+    print('Viewing orders')
+    # return HttpResponse('Hello')
+    return render(request, 'clothing_dojo/clothingDojo_viewOrders.html')

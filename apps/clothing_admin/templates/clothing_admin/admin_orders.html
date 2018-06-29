@@ -24,6 +24,7 @@
                 })
                 .done(function(response){
                     console.log('Recieved response', response)
+                    $('tbody').html(response)
                 });
             });
         });
