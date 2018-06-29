@@ -70,6 +70,7 @@ div.right{
     text-align:center;
     padding-bottom:30px;
     margin-bottom:25px;
+    border-radius:8px;
     /* background:rgb(241,244,248) */
 }
 div.right p{

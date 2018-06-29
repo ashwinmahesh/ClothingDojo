@@ -3,8 +3,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from apps.clothing_admin.models import *
 from apps.clothing_dojo.models import *
 from djangounchained_flash import ErrorManager, getFromSession
+from django.conf import settings
+import stripe
+import re
 
 FREE_SHIRT_ID=1
+stripe.api_key=settings.STRIPE_SECRET
 
 def loginPage(request):
     return render(request, 'clothing_dojo/login_page.html')
@@ -114,7 +118,8 @@ def cart(request):
         'cart_success':e.getMessages('cart_success'),
         'cart':User.objects.get(id=request.session['userID']).cart,
         'count':count,
-        'show_checkout':showCheckout
+        'show_checkout':showCheckout,
+        'user':User.objects.get(id=request.session['userID'])
     }
     request.session['flash']=e.addToSession()
     return render(request, 'clothing_dojo/clothingDojo_cart.html', context)
@@ -158,7 +163,38 @@ def checkout(request):
         print('Cannot checkout on an empty cart')
         return redirect('/cart/')
     print('Checking out')
-    return redirect('/processCheckout/')
+    # return redirect('/processCheckout/')
+    return redirect('/payment/')
+
+def paymentInfo(request):
+    if 'loggedIn' not in request.session:
+        return redirect('/login_page/')
+    if request.session['loggedIn']==False:
+        return redirect('/login_page/')
+    if 'userID' not in request.session:
+        return redirect('/login_page/')
+    try:
+        User.objects.get(id=request.session['userID']).cart
+    except ObjectDoesNotExist:
+        print("User ", request.session['userID'], 'has no cart')
+        c=Cart(user=User.objects.get(id=request.session['userID']))
+        c.save()
+        return redirect('/cart/')
+    count=0
+    for item in User.objects.get(id=request.session['userID']).cart.items.all():
+        count+=item.quantity
+    e=getFromSession(request.session['flash'])
+    context={
+        'user':User.objects.get(id=request.session['userID']),
+        'cart':User.objects.get(id=request.session['userID']).cart,
+        'count':count,
+        'card_fail':e.getMessages('card_fail'),
+        'month_fail':e.getMessages('month_fail'),
+        'year_fail':e.getMessages('year_fail'),
+        'cvv_fail':e.getMessages('cvv_fail'),
+    }
+    request.session['flash']=e.addToSession()
+    return render(request, 'clothing_dojo/clothingDojo_payment.html', context)
 
 def processCheckout(request):
     print('Processing Checkout')
@@ -272,3 +308,59 @@ def viewOrders(request):
     print('Viewing orders')
     # return HttpResponse('Hello')
     return render(request, 'clothing_dojo/clothingDojo_viewOrders.html')
+
+def processPayment(request):
+    if 'loggedIn' not in request.session:
+        return redirect('/login_page/')
+    if request.session['loggedIn']==False:
+        return redirect('/login_page/')
+    if 'userID' not in request.session:
+        return redirect('/login_page/')
+    if request.method!='POST':
+        return redirect('/')
+    try:
+        User.objects.get(id=request.session['userID']).cart
+    except ObjectDoesNotExist:
+        print("User ", request.session['userID'], 'has no cart')
+        c=Cart(user=User.objects.get(id=request.session['userID']))
+        c.save()
+        return redirect('/cart/')
+    if len(User.objects.get(id=request.session['userID']).cart.items.all())==0:
+        print('Cannot checkout on an empty cart')
+        return redirect('/cart/')
+
+    # DATA VALIDATIONS
+    e=getFromSession(request.session['flash'])
+    validForm=True
+    CARD_REGEX=re.compile(r'^[0-9]*$')
+    if len(request.POST['card_number'])<9:
+        e.addMessage('Invalid card number.', 'card_fail')
+        validForm=False
+    elif not CARD_REGEX.match(request.POST['card_number']):
+        e.addMessage('Invalid card number.', 'card_fail')
+        validForm=False
+    if len(request.POST['exp_month'])==0:
+        e.addMessage('Expiration month cannot be empty.', 'month_fail')
+        validForm=False
+    elif not request.POST['exp_month'].isdigit():
+        e.addMessage('Invalid expiration month.', 'month_fail')
+        validForm=False
+    if len(request.POST['exp_year'])==0:
+        e.addMessage('Expiration year cannot be empty.', 'year_fail')
+        validForm=False
+    elif not request.POST['exp_month'].isdigit():
+        e.addMessage('Invalid expiration year.', 'year_fail')
+        validForm=False
+    if len(request.POST['cvv'])==0:
+        e.addMessage('CVV cannot be empty.', 'cvv_fail')
+        validForm=False
+    elif not request.POST['cvv'].isdigit():
+        e.addMessage('Invalid CVV.', 'cvv_fail')
+        validForm=False
+    request.session['flash']=e.addToSession()
+    if(validForm==False):
+        return redirect('/payment/')
+
+    #FORM IS VALID
+    print(request.POST)
+    return redirect('/payment/')

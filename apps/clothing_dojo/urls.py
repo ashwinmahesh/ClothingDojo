@@ -14,4 +14,6 @@ urlpatterns=[
     url(r'^claim/$', views.claimShirt),
     url(r'^processClaim/$', views.processClaim),
     url(r'^viewOrders/$', views.viewOrders),
+    url(r'^payment/$', views.paymentInfo),
+    url(r'^processPayment/$', views.processPayment),
 ]

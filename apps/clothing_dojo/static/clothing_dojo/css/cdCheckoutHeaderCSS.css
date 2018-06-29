@@ -1,0 +1,133 @@
+*{
+    /* font-family: 'Proxima Nova', Georgia, sans-serif; */
+}
+div.wrapper{
+    width:100%;
+}
+div.header{
+    background:rgb(60,76,91);
+    padding:15px 0px;
+    font-family: 'Proxima Nova', Georgia, sans-serif;
+}
+div.header p.title{
+    color:rgb(241,244,248);
+    font-size:32pt;
+    font-family: 'Proxima Nova', Georgia, sans-serif;
+    margin:auto;
+    width:fit-content;
+    /* text-align:center; */
+}
+div.header img{
+    width:200px;
+    float:left;
+    position:absolute;
+    margin-top:2px;
+    margin-left:10px;
+    color:white;
+}
+div.navbar{
+    background:rgb(241, 241, 241);
+    margin-bottom:0px;
+    font-family: 'Proxima Nova', Georgia, sans-serif;
+}
+div.navbar>*{
+    display:inline-block;
+    float:right;
+    font-size:12pt;
+    margin-bottom:0px;
+    padding-bottom:0px;
+    margin:0px;
+    /* margin-top:10px; */
+}
+div.navbar p{
+    color:rgb(151,151,151);
+    margin-right:5px;
+    margin-top:12px;
+}
+div.navbar a.platform{
+    background:rgb(0, 154, 199);
+    border-radius:5px;
+    color:rgb(241,244,248);
+    padding:5px 10px;
+    /* margin-top:5px; */
+    margin-left:5px;
+    margin-right:15px;
+    margin-top:7px;
+}
+div.navbar a.cart{
+    float:left;
+    border-radius:4px;
+}
+div.navbar a.cart img{
+    height:40px;
+    width:40px;
+    margin:0px;
+}
+div.navbar a.cart:hover{
+    background:rgb(49, 137, 180);
+}
+div.navbar a:hover{
+    background:rgb(0, 117, 153);
+    text-decoration:none;
+}
+div.navbar a:active{
+    text-decoration:none;
+}
+div.footer{
+    background:rgb(60,76,91);
+    padding-top:30px;
+    padding-bottom:30px;
+}
+div.footer p{
+    color:rgb(241,244,248);
+    font-size:13pt;
+    text-align:center;
+}
+div.navbar a.orders{
+    float:left;
+    background:rgb(0,154, 199);
+    border-radius:4px;
+    color:rgb(241,244,248);
+    font-size:12pt;
+    padding:4px 8px;
+    margin-top:9px;
+}
+div.navbar a.orders:hover{
+    background:rgb(0, 117, 153);
+    text-decoration:none;
+}
+@media only screen and (max-width:700px){
+    div.header p.title{
+        display:none;
+    }
+    div.header{
+        height:90px;
+    }
+}
+@media only screen and (min-width:481px){
+    div.body{
+        max-width:1130px;
+    }
+}
+@media only screen and (min-width:1024px){
+    div.body{
+        /* width:fit-content; */
+        display:block;
+        margin:auto;
+        /* background:rgb(241, 244, 248); */
+        /* padding:0px 20px; */
+    }
+    div.navbar a.platform{
+        margin-left:10px;
+    }
+    div.navbar p{
+        margin-right:10px;
+    }
+    div.navbar{
+        border-bottom:1px solid rgb(37,37,45);
+        border-top:1px solid rgb(37,37,45);
+    }
+    a.cart{
+        margin:5px;
+    }
+}
