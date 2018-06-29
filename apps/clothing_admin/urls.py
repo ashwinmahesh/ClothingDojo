@@ -22,4 +22,5 @@ urlpatterns=[
     url(r'^batchInfo/viewBatch/(?P<batch_id>[0-9]\d*)/$', views.viewBatch),
     url(r'^batchConfirm/(?P<batch_id>[0-9]\d*)/$', views.batchConfirm),
     url(r'^finalizeBatch/(?P<batch_id>[0-9]\d*)/$', views.finalizeBatch),
+    url(r'^searchAPI/$', views.searchAPI),
 ]

@@ -189,8 +189,11 @@ def processCheckout(request):
         p=ot.product
         p.num_sold+=ot.quantity
         p.save()
-    o.save()
+
     location=User.objects.get(id=request.session['userID']).cohort.location
+    o.batch=location.batches.last()
+    o.save()
+    
     for item in o.items.all():
         if len(location.batches.last().items.filter(product=item.product, size=item.size, color=item.color))==0:
             bt=BatchItem.objects.create(product=item.product, batch=location.batches.last(), size=item.size, color=item.color, quantity=item.quantity, total=item.total)
@@ -245,12 +248,13 @@ def processClaim(request):
     o.num_items=1
     shirt.num_sold+=1
     shirt.save()
+    location=User.objects.get(id=request.session['userID']).cohort.location
+    o.batch=location.batches.last()
     o.save()
     user=User.objects.get(id=request.session['userID'])
     user.claimed_shirt=True
     user.save()
-
-    location=User.objects.get(id=request.session['userID']).cohort.location
+    
     if len(location.batches.last().items.filter(product=shirt, size=request.POST['size'], color=Color.objects.get(id=request.POST['color'])))==0:
         bt=BatchItem.objects.create(product=shirt, batch=location.batches.last(), size=request.POST['size'], color=Color.objects.get(id=request.POST['color']), quantity=1, total=0)
     else:

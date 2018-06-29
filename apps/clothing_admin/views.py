@@ -266,6 +266,10 @@ def finalizeBatch(request, batch_id):
     b=Batch.objects.get(id=batch_id)
     b.status='Closed'
     b.save()
+    for order in b.orders.all():
+        order.ordered=True
+        order.save()
+        
     location=Batch.objects.get(id=batch_id).location
     Batch.objects.create(location=location)
     e=getFromSession(request.session['flash'])
@@ -274,6 +278,19 @@ def finalizeBatch(request, batch_id):
     print('Batch successfully finalized')
     string='/admin/batchInfo/viewLocation/'+str(location.id)+'/'
     return redirect(string)
+
+def searchAPI(request):
+    if request.method!='POST':
+        return HttpResponse('This is an API')
+    print('You are searching')
+    key=request.POST['adminSearch']
+    users=User.objects.filter()
+    orders=Order.objects.filter()
+    context={
+        'orders':orders
+    }
+    print(context)
+    return HttpResponse('Working')
 
 def test(request):
     return render(request, 'clothing_admin/test.html')

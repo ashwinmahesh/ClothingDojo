@@ -39,6 +39,7 @@ class Order(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     ordered=models.BooleanField(default=False)
+    batch=models.ForeignKey(Batch, related_name='orders', null=True)
 
 class OrderItem(models.Model):
     product=models.ForeignKey(Product, related_name='orders')
