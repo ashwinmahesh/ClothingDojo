@@ -8,14 +8,120 @@
     {% load static %}
     <link rel='stylesheet' type='text/css' href='{% static 'clothing_dojo/css/cdCheckoutHeaderCSS.css' %}'>
     <link rel='stylesheet' type='text/css' href='{% static 'clothing_dojo/css/cdCheckoutCSS.css' %}'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href='{% static 'clothing_dojo/css/proxima_nova/fonts/fonts.css' %}'/>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
+    <script src="https://js.stripe.com/v2/" type='text/javascript'></script>
+    <script>
+        Stripe.publishableKey='{{publishable}}';
+    </script>
+    <script>
+        $(document).ready(function(){
+
+            // var form = document.getElementById('#payment_form');
+            // form.addEventListener('submit', function(e) {
+            //     e.preventDefault();
+            //     var card={
+            //         number:$('#cardNumber').val(),
+            //         expMonth:$('#expMonth').val(),
+            //         expYear:$('#expYear').val(),
+            //         cvc:$('#cvv').val()
+            //     };
+
+            //     Stripe.createToken(card, function(status, response){
+            //         if(status===200){
+            //             console.log(status, response);
+            //             $('.red').hide();
+            //             token=response.id
+            //             console.log('Token: '+token)
+
+            //             // var hiddenInput=document.createElement('input')
+            //             // hiddenInput.setAttribute('type', 'hidden')
+            //             // hiddenInput.setAttribute('name', 'stripe_id')
+            //             // hiddenInput.setAttribute('id', 'stripe_id')
+            //             // hiddenInput.setAttribute('value', token),
+            //             //     1000
+            //             // });
+            //             // hiddenInput.delay(10000).setAttribute('value', token)
+            //             // form.appendChild(hiddenInput);
+            //             $('#stripe_id').val(token)
+            //             // $('#stripe_id').attr('value', token)
+            //             console.log('Value: ' + $('#stripe_id').val());
+
+            //             // $('#stripe_id').val(token);
+            //             // console.log($('#stripe_id').val())
+            //             // return false;
+
+            //             $('#payment_form').submit();
+            //             console.log('After submit')
+            //             console.log($('#payment_form'))
+            //         }
+            //         else{
+            //             $('#stripe-error-message').text(response.error.message);
+            //             $('#credit-card-errors').show()
+            //             $('#submit').attr('disabled', false)
+            //         }
+            //     });
+            //     return false;
+            //     // return false;
+            // })
+            // });
+
+            // $('#submit').attr('disabled', false)
+            $('#turn_in').click(function(){
+                
+                var form=$('#payment_form');
+                var card={
+                    number:$('#cardNumber').val(),
+                    expMonth:$('#expMonth').val(),
+                    expYear:$('#expYear').val(),
+                    cvc:$('#cvv').val()
+                };
+
+                Stripe.createToken(card, function(status, response){
+                    if(status===200){
+                        console.log(status, response);
+                        $('.red').hide();
+                        token=response.id
+                        console.log('Token: '+token)
+
+                        // var hiddenInput=document.createElement('input')
+                        // hiddenInput.setAttribute('type', 'hidden')
+                        // hiddenInput.setAttribute('name', 'stripe_id')
+                        // hiddenInput.setAttribute('id', 'stripe_id')
+                        // hiddenInput.setAttribute('value', token),
+                        //     1000
+                        // });
+                        // hiddenInput.delay(10000).setAttribute('value', token)
+                        // form.appendChild(hiddenInput);
+                        $('#stripe_id').val(token)
+                        // $('#stripe_id').attr('value', token)
+                        console.log('Value: ' + $('#stripe_id').val());
+                        
+                        // $('#stripe_id').val(token);
+                        // console.log($('#stripe_id').val())
+                        // return false;
+
+                        $('#payment_form').submit();
+                        console.log('After submit')
+                        console.log($('#payment_form'))
+                    }
+                    else{
+                        $('#stripe-error-message').text(response.error.message);
+                        $('#credit-card-errors').show()
+                        $('#submit').attr('disabled', false)
+                    }
+                });
+                return false;
+                // return false;
+            })
+        });
+    </script>
 </head>
 </head>
 <body>
@@ -48,10 +154,11 @@
                     <p>Shipping: FREE</p>
                     <p>Tax: NONE</p>
                     <p class='medium'>Total: ${{cart.total}}</p>
-                    
                 </div>
             </div>
-            <form action='/processPayment/' method='post'>
+
+           
+            <form id='payment_form' action='/processPayment/' method='post'>
                 {% csrf_token %}
 
                 <div class="container">
@@ -65,6 +172,9 @@
                                 </div>
                                 <div class="panel-body">
                                     <form role="form">
+                                        <div id='credit-card-errors'>
+                                            <p class='red' id='stripe-error-message'></p>
+                                        </div>
                                     <div class="form-group">
                                         <label for="cardNumber">
                                             CARD NUMBER</label>
@@ -73,6 +183,7 @@
                                                 autofocus />
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
                                         </div>
+                                        
                                         {% for message in card_fail %}
                                         <p class='red'>{{message}}</p>
                                         {% endfor %}
@@ -80,21 +191,20 @@
                                     <div class="row">
                                         <div class="col-xs-7 col-md-7">
                                             <div class="form-group">
-                                                <!-- <label for="expityMonth">
-                                                    EXPIRATION DATE</label> -->
                                                 <p class='exp'>EXPIRATION DATE</p>
                                                 <div class="col-xs-6 col-lg-6 pl-ziro">
-                                                    <input name='exp_month' type="text" class="form-control input_2" id="expityMonth" placeholder="MM" maxlength="2" max='12' min='1'/>
+                                                    <input name='exp_month' type="text" class="form-control input_2" id="expMonth" placeholder="MM" maxlength="2" max='12' min='1'/>
                                                 </div>
                                                 <div class="col-xs-6 col-lg-6 pl-ziro">
-                                                    <input name='exp_year' type="text" class="form-control input_2" id="expityYear" placeholder="YY" maxlength="2" /></div>
+                                                    <input name='exp_year' type="text" class="form-control input_2" id="expYear" placeholder="YY" maxlength="2" /></div>
+                                                    <input type='hidden' name='stripe_id' id='stripe_id' value='17'>
                                             </div>
                                         </div>
                                         <div class="col-xs-5 col-md-5 pull-right">
                                             <div class="form-group">
                                                 <label for="cvCode">
                                                     CV CODE</label>
-                                                <input name='cvv' type="password" class="form-control" id="cvCode" placeholder="CV"/>
+                                                <input name='cvv' type="password" class="form-control" id="cvv" placeholder="CV"/>
                                             </div>
                                         </div>
                                     </div>
@@ -115,8 +225,7 @@
                                 </li>
                             </ul>
                             <br/>
-                            <!-- <a href="http://www.jquery2dotnet.com" class="btn btn-success btn-lg btn-block" role="button">Pay</a> -->
-                            <input type='submit' class='btn btn-success btn-lg btn-block' role='button' value='Pay'>
+                            <input id='turn_in' type='submit' class='btn btn-success btn-lg btn-block' role='button' value='Pay'>
                         </div>
                     </div>
                 </div>

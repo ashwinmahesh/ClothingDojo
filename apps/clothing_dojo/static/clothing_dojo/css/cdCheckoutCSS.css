@@ -90,6 +90,7 @@ div.body> div.anchor a:active{
 }
 div.body{
     padding-top:1px;
+    padding-bottom:25px;
 }
 p.exp{
     font-weight:bold;
@@ -99,6 +100,7 @@ p.red{
     font-size:11pt;
     font-style:italic;
 }
+
 @media only screen and (max-width:480px){
     input.input_2{
         width:50px;

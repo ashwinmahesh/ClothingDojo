@@ -192,6 +192,7 @@ def paymentInfo(request):
         'month_fail':e.getMessages('month_fail'),
         'year_fail':e.getMessages('year_fail'),
         'cvv_fail':e.getMessages('cvv_fail'),
+        'publishable':settings.STRIPE_PUBLISHABLE,
     }
     request.session['flash']=e.addToSession()
     return render(request, 'clothing_dojo/clothingDojo_payment.html', context)
@@ -241,7 +242,10 @@ def processCheckout(request):
 
     print('Checkout successful')
     cart.delete()
-    return redirect('/cart/')
+    e=getFromSession(request.session['flash'])
+    e.addMessage('Your order has been successfully placed!','shirt_success')
+    request.session['flash']=e.addToSession()
+    return redirect('/')
 
 def claimShirt(request):
     if 'loggedIn' not in request.session:
@@ -357,10 +361,23 @@ def processPayment(request):
     elif not request.POST['cvv'].isdigit():
         e.addMessage('Invalid CVV.', 'cvv_fail')
         validForm=False
-    request.session['flash']=e.addToSession()
+    
     if(validForm==False):
+        request.session['flash']=e.addToSession()
         return redirect('/payment/')
-
+    print(request.POST)
+    try:
+        customer=stripe.Charge.create(
+            amount=int(User.objects.get(id=request.session['userID']).cart.total*100),
+            currency='USD',
+            description=User.objects.get(id=request.session['userID']).email,
+            card=request.POST['stripe_id']
+        )
+        return redirect('/processCheckout/')
+    except stripe.CardError as error:
+        e.addMessage('The card has been declined', 'card_fail')
+        request.session['flash']=e.addToSession()
+        return redirect('/payment/')
     #FORM IS VALID
     print(request.POST)
-    return redirect('/payment/')
+    return redirect('/processCheckout/')
